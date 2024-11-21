@@ -25,7 +25,7 @@ spec:
       app: myapp
       replica: green
 
-#or
+#and
 
 spec:
   replicas: 2
