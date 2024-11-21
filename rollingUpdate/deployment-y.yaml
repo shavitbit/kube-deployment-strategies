@@ -1,0 +1,38 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+  namespace: default
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      # Max number of Pods that can be unavailable during the update process
+      maxUnavailable: 1
+      # Max number of Pods that can be created over the desired number of Pods
+      maxSurge: 1
+  replicas: 10
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+        - name: myapp
+          image: philipsinfo/flaskapiant:0.0.6
+          resources:
+            limits:
+              memory: "1Gi"
+              cpu: "1"
+          ports:
+            - name: http
+              containerPort: 5000
+          startupProbe:
+            tcpSocket:
+              port: 8181
+            initialDelaySeconds: 20
+            periodSeconds: 5
